@@ -80,8 +80,8 @@ const helpers = {
         const length = indexesToCheck.length;
         const patternToMatchConsonants = /[bcdfghlmnpqrstvzjkwxy]/gi;
         const patternToMatchVovels = /[aeiou]/gi;
-        const consonants = valueToCheck.match(patternToMatchConsonants);
-        const vovels = valueToCheck.match(patternToMatchVovels);
+        const consonants = valueToCheck.match(patternToMatchConsonants) || [];
+        const vovels = valueToCheck.match(patternToMatchVovels) || [];
         let returnValueToCheck = '';
         if (consonants.length > length) {
             returnValueToCheck = `${consonants[indexesToCheck[0]]}${consonants[indexesToCheck[1]]}${
