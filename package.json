@@ -5,13 +5,18 @@
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "browser": "dist/index.umd.js",
+  "repository": {
+    "type": "git",
+    "git": "https://github.com/Flowrome/cf-it-validator"
+  },
+  "keywords": ["form", "validation", "tax code", "fiscal code", "codice fiscale", "italian"],
   "scripts": {
     "build": "rollup -c",
     "publisher": "rollup -c && npm publish",
     "test": "node test/spec",
     "pretest": "npm run build"
   },
-  "author": "",
+  "author": "Flowrome",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.18.5",
