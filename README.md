@@ -20,3 +20,6 @@ for municipes the list is taken [here](https://dait.interno.gov.it/territorio-e-
 
 everything is calculated in lowercase, so no need to worry about case sensitiveness
 
+# Other info
+
+You can check just a part of the fiscal code, for example if in the object you pass only the *name* and the *lastname* the library will check only the first six characters
