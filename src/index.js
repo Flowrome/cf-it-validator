@@ -1,11 +1,13 @@
 import { municipes } from './municipes';
+import { charsOdd, charsEven } from './chars';
 
 export const validateITCF = (cfAttr, { name, lastname, birthdate, municipe }) => {
     if (!cfAttr) {
-        return false
+        return false;
     }
     const cf = cfAttr?.toLowerCase();
-    const pattern = /^([A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST]{1}[0-9LMNPQRSTUV]{2}[A-Z]{1}[0-9LMNPQRSTUV]{3}[A-Z]{1})$|([0-9]{11})$/
+    const pattern =
+        /^([A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST]{1}[0-9LMNPQRSTUV]{2}[A-Z]{1}[0-9LMNPQRSTUV]{3}[A-Z]{1})$|([0-9]{11})$/;
     let toReturn = pattern.test(cf.toUpperCase());
     let failed = {};
     if (name) {
@@ -28,9 +30,14 @@ export const validateITCF = (cfAttr, { name, lastname, birthdate, municipe }) =>
         toReturn = toReturn && check;
         failed = { ...failed, municipe: check };
     }
-    // return { valid: toReturn, fails: { ...failed } };
 
-    return toReturn
+    const checkLastChar = functionsToCheck.lastChar(cf);
+    toReturn = toReturn && checkLastChar;
+    failed = { ...failed, lastChar: checkLastChar };
+
+    // console.log({ valid: toReturn, fails: { ...failed } });
+
+    return toReturn;
 };
 
 const functionsToCheck = {
@@ -76,6 +83,15 @@ const functionsToCheck = {
         const municipeToCheck = municipes[municipeFromCF].municipe.toLowerCase();
         return municipeToCheck === municipe;
     },
+    lastChar: cf => {
+        const partialFiscalCode = cf.slice(0, -1)
+        const [even, odd] = [...partialFiscalCode].reduce((r, char, i) => (r[(i + 1) % 2].push(char.toUpperCase()), r), [[], []]);
+        const oddValues = odd.map(char => charsOdd[`${char}`]);
+        const evenValues = even.map(char => charsEven[`${char}`]);
+        const sum = oddValues.reduce((a, b) => a + b, 0) + evenValues.reduce((a, b) => a + b, 0);
+        const lastCharCheck = String.fromCharCode(97 + (sum % 26)).toUpperCase();
+        return lastCharCheck === cf.charAt(cf.length - 1).toUpperCase();
+    },
 };
 
 const helpers = {
@@ -91,9 +107,9 @@ const helpers = {
                 consonants[indexesToCheck[2]]
             }`;
         } else if (consonants.length === length) {
-            returnValueToCheck = consonants.join('')
+            returnValueToCheck = consonants.join('');
         } else {
-            const tmpCheck = consonants.join('')
+            const tmpCheck = consonants.join('');
             returnValueToCheck = `${tmpCheck}${vovels.join()}XXX`.substring(0, length);
         }
         return singleChars === returnValueToCheck;
